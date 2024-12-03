@@ -26,7 +26,7 @@ class RecyclerAdapter :
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
         val item = getItem(position) // використовуємо getItem() для отримання елемента з ListAdapter
         holder.titleTextView.text = item.title
-        holder.descriptionTextView.text = item.description
+        holder.descriptionTextView.text = item.categoryId.toString()
     }
 
     override fun getItemCount(): Int = currentList.size // використовуємо currentList замість items

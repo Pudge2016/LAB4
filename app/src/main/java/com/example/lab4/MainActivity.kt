@@ -40,7 +40,11 @@ class MainActivity : AppCompatActivity() {
         val recyclerView: RecyclerView = findViewById(R.id.recyclerView)
         recyclerView.layoutManager = LinearLayoutManager(this)
 
-        val adapter = RecyclerAdapter()
+        val adapter = RecyclerAdapter(onDeleteClick = { item ->
+            CoroutineScope(Dispatchers.IO).launch {
+                dataItemDao.deleteItem(item)
+            }
+        }, categoryDao = categoryDao)  // Pass the categoryDao to the adapter
         recyclerView.adapter = adapter
 
         // Спостереження за LiveData з бази даних
@@ -101,15 +105,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         // Видалення останнього елемента
-        findViewById<Button>(R.id.deleteButton).setOnClickListener {
-            val currentList = dataList.value
-            if (currentList != null && currentList.isNotEmpty()) {
-                val lastItem = currentList.last()
-                CoroutineScope(Dispatchers.IO).launch {
-                    dataItemDao.deleteItem(lastItem)
-                }
-            }
-        }
+
     }
 
     // Метод для оновлення списку категорій після додавання нової категорії
